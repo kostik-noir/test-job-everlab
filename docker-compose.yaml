@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: everlab-frontend
+    build:
+      context: ./frontend
+    ports:
+      - ${FRONTEND_PUBLIC_PORT}:3000
+    volumes:
+      - ./frontend:/app
+      - .env:/app/.env
+  backend:
+    container_name: everlab-backend
+    build:
+      context: ./backend
+    ports:
+      - ${BACKEND_PUBLIC_PORT}:3000
+    volumes:
+      - ./backend:/app
+      - .env:/app/.env
+      - ./database/dump:/app/dump
+  database:
+    image: mysql
+    container_name: everlab-db
+    environment:
+      MYSQL_DATABASE: everlab
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./database:/app
